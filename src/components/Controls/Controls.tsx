@@ -11,10 +11,44 @@ type Props = {
   onPause: () => void
 }
 
+const DAS_DELAY = 170
+const ARR_RATE = 50
+
 export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, onHold, onPause }: Props) {
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null)
   const swipeHandledRef = useRef(false)
+  const repeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const repeatIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  const clearRepeat = useCallback(() => {
+    if (repeatTimerRef.current !== null) {
+      clearTimeout(repeatTimerRef.current)
+      repeatTimerRef.current = null
+    }
+    if (repeatIntervalRef.current !== null) {
+      clearInterval(repeatIntervalRef.current)
+      repeatIntervalRef.current = null
+    }
+  }, [])
+
+  // Auto-repeat for on-screen buttons (DAS + ARR)
+  const startRepeat = useCallback((action: () => void) => {
+    clearRepeat()
+    action()
+    repeatTimerRef.current = setTimeout(() => {
+      repeatIntervalRef.current = setInterval(action, ARR_RATE)
+    }, DAS_DELAY)
+  }, [clearRepeat])
+
+  const handlePointerDown = useCallback((action: () => void) => {
+    return () => startRepeat(action)
+  }, [startRepeat])
+
+  const handlePointerUp = useCallback(() => {
+    clearRepeat()
+  }, [clearRepeat])
+
+  // Touch gesture handling
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if ((e.target as HTMLElement).closest('button')) return
     const touch = e.touches[0]
@@ -36,15 +70,12 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
     const minSwipe = 30
 
     if (absDx < minSwipe && absDy < minSwipe && elapsed < 300) {
-      // Tap = rotate
       if (!swipeHandledRef.current) {
         onRotate()
       }
     } else if (absDy > absDx && dy < -minSwipe) {
-      // Swipe up = hold
       onHold()
-    } else if (absDy > absDx && dy > minSwipe) {
-      // Swipe down = hard drop
+    } else if (absDy > absDx && dy > minSwipe * 2) {
       onHardDrop()
     }
 
@@ -60,15 +91,13 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
     const absDx = Math.abs(dx)
     const absDy = Math.abs(touch.clientY - touchStartRef.current.y)
 
-    // Horizontal swipe for movement (each 40px = one cell move)
-    if (absDx > 30 && absDx > absDy) {
+    if (absDx > 25 && absDx > absDy) {
       swipeHandledRef.current = true
       if (dx > 0) {
         onRight()
       } else {
         onLeft()
       }
-      // Reset start point for continuous movement
       touchStartRef.current = {
         ...touchStartRef.current,
         x: touch.clientX,
@@ -88,6 +117,10 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
     }
   }, [handleTouchStart, handleTouchEnd, handleTouchMove])
 
+  useEffect(() => {
+    return () => clearRepeat()
+  }, [clearRepeat])
+
   return (
     <div className={styles.controls}>
       <div className={styles.topRow}>
@@ -98,12 +131,33 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
         <button className={styles.btn} onPointerDown={onRotate}>&#x21BB;</button>
       </div>
       <div className={styles.row}>
-        <button className={styles.btn} onPointerDown={onLeft}>&#x25C0;</button>
-        <button className={styles.btn} onPointerDown={onSoftDrop}>&#x25BC;</button>
-        <button className={styles.btn} onPointerDown={onRight}>&#x25B6;</button>
+        <button
+          className={styles.btn}
+          onPointerDown={handlePointerDown(onLeft)}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
+          &#x25C0;
+        </button>
+        <button
+          className={styles.btn}
+          onPointerDown={handlePointerDown(onSoftDrop)}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
+          &#x25BC;
+        </button>
+        <button
+          className={styles.btn}
+          onPointerDown={handlePointerDown(onRight)}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
+          &#x25B6;
+        </button>
       </div>
       <div className={styles.row}>
-        <button className={styles.btnWide} onPointerDown={onHardDrop}>Drop</button>
+        <button className={styles.btnWide} onPointerDown={onHardDrop}>Hard Drop</button>
       </div>
     </div>
   )

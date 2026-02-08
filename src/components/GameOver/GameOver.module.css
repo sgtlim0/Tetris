@@ -6,32 +6,41 @@
   min-height: 100dvh;
   padding: 24px;
   text-align: center;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .title {
   font-size: 2.5rem;
-  font-weight: 800;
+  font-weight: 900;
   color: #f05050;
-  text-shadow: 0 0 20px rgba(240, 80, 80, 0.4);
+  text-shadow:
+    0 0 20px rgba(240, 80, 80, 0.4),
+    0 0 40px rgba(240, 80, 80, 0.15);
   margin-bottom: 24px;
+  letter-spacing: 0.1em;
 }
 
 .stats {
   display: grid;
   grid-template-columns: auto auto;
-  gap: 4px 16px;
-  margin-bottom: 24px;
+  gap: 6px 20px;
+  margin-bottom: 28px;
   text-align: left;
+  background: rgba(15, 15, 50, 0.6);
+  border: 1px solid #2a2a5a;
+  border-radius: 10px;
+  padding: 16px 24px;
+  animation: slideUp 0.4s ease-out 0.1s both;
 }
 
 .statLabel {
-  color: #8888aa;
+  color: #7777aa;
   font-size: 0.85rem;
 }
 
 .statValue {
   color: #e8e8f0;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -39,28 +48,32 @@
 
 .newHighScore {
   color: #f0a000;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 16px;
+  letter-spacing: 0.05em;
   animation: highScorePulse 1s ease-in-out infinite alternate;
 }
 
 @keyframes highScorePulse {
   from {
     text-shadow: 0 0 10px rgba(240, 160, 0, 0.3);
+    transform: scale(1);
   }
   to {
-    text-shadow: 0 0 20px rgba(240, 160, 0, 0.6);
+    text-shadow: 0 0 25px rgba(240, 160, 0, 0.6);
+    transform: scale(1.05);
   }
 }
 
 .buttons {
   display: flex;
   gap: 12px;
+  animation: slideUp 0.4s ease-out 0.2s both;
 }
 
 .retryBtn {
-  padding: 12px 36px;
+  padding: 12px 40px;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -68,17 +81,32 @@
   color: #0a0a2e;
   background: linear-gradient(135deg, #00f0f0, #00c0c0);
   border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 240, 240, 0.3);
+  box-shadow:
+    0 0 15px rgba(0, 240, 240, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s;
+}
+
+.retryBtn:hover {
+  box-shadow:
+    0 0 25px rgba(0, 240, 240, 0.5),
+    0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .menuBtn {
-  padding: 12px 36px;
+  padding: 12px 40px;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #c0c0d0;
-  background: rgba(40, 40, 80, 0.8);
+  background: rgba(30, 30, 70, 0.8);
   border: 1px solid #3a3a6a;
   border-radius: 8px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.menuBtn:hover {
+  background: rgba(40, 40, 90, 0.9);
+  border-color: #5a5a8a;
 }

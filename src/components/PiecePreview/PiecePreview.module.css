@@ -1,19 +1,26 @@
 .container {
-  background: rgba(20, 20, 60, 0.6);
+  background: rgba(15, 15, 50, 0.7);
   border: 1px solid #2a2a5a;
-  border-radius: 6px;
-  padding: 6px;
+  border-radius: 8px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  backdrop-filter: blur(2px);
+  transition: border-color 0.2s;
+}
+
+.container:first-child {
+  border-color: #3a3a6a;
 }
 
 .label {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #8888aa;
-  margin-bottom: 4px;
+  letter-spacing: 0.12em;
+  color: #6a6a8a;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .grid {
@@ -41,12 +48,15 @@
 
 .cell {
   aspect-ratio: 1;
-  border-radius: 1px;
+  border-radius: 2px;
+  transition: background-color 0.15s;
 }
 
 .filled {
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    0 0 4px currentColor;
 }
 
 .empty {
@@ -54,7 +64,8 @@
 }
 
 .dimmed {
-  opacity: 0.35;
+  opacity: 0.3;
+  filter: grayscale(0.5);
 }
 
 .small .grid4 {

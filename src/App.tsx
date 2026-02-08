@@ -71,6 +71,9 @@ export default function App() {
         <div className={styles.pauseOverlay}>
           <div className={styles.pauseText}>PAUSED</div>
           <div className={styles.pauseHint}>Press P or ESC to resume</div>
+          <button className={styles.pauseResume} onClick={game.togglePause}>
+            Resume
+          </button>
         </div>
       )}
     </div>

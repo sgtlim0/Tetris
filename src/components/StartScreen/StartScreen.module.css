@@ -6,43 +6,71 @@
   min-height: 100dvh;
   padding: 24px;
   text-align: center;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .title {
-  font-size: 3rem;
-  font-weight: 800;
-  letter-spacing: 0.2em;
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
   color: #00f0f0;
-  text-shadow: 0 0 30px rgba(0, 240, 240, 0.5), 0 0 60px rgba(0, 240, 240, 0.2);
+  text-shadow:
+    0 0 30px rgba(0, 240, 240, 0.5),
+    0 0 60px rgba(0, 240, 240, 0.2),
+    0 2px 0 #008080;
   margin-bottom: 8px;
   text-transform: uppercase;
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from {
+    text-shadow:
+      0 0 30px rgba(0, 240, 240, 0.5),
+      0 0 60px rgba(0, 240, 240, 0.2),
+      0 2px 0 #008080;
+  }
+  to {
+    text-shadow:
+      0 0 40px rgba(0, 240, 240, 0.7),
+      0 0 80px rgba(0, 240, 240, 0.3),
+      0 2px 0 #008080;
+  }
 }
 
 .subtitle {
-  color: #8888aa;
+  color: #7777aa;
   font-size: 0.85rem;
   margin-bottom: 32px;
+  letter-spacing: 0.05em;
 }
 
 .highScore {
   color: #f0a000;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   margin-bottom: 24px;
+  text-shadow: 0 0 8px rgba(240, 160, 0, 0.3);
 }
 
 .rules {
   max-width: 320px;
   text-align: left;
-  margin-bottom: 32px;
-  color: #aaaacc;
+  margin-bottom: 36px;
+  color: #9999bb;
   font-size: 0.78rem;
-  line-height: 1.8;
+  line-height: 1.9;
+  animation: slideUp 0.5s ease-out 0.1s both;
 }
 
 .rules dt {
-  color: #c0c0e0;
+  color: #b0b0d0;
   font-weight: 600;
   display: inline;
+  background: rgba(40, 40, 80, 0.5);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.72rem;
 }
 
 .rules dd {
@@ -56,19 +84,30 @@
 }
 
 .playBtn {
-  padding: 14px 48px;
-  font-size: 1.1rem;
+  padding: 16px 56px;
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #0a0a2e;
   background: linear-gradient(135deg, #00f0f0, #00c0c0);
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 240, 240, 0.3);
+  border-radius: 10px;
+  box-shadow:
+    0 0 20px rgba(0, 240, 240, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.3);
   transition: box-shadow 0.2s, transform 0.1s;
+  animation: slideUp 0.5s ease-out 0.2s both;
+}
+
+.playBtn:hover {
+  box-shadow:
+    0 0 30px rgba(0, 240, 240, 0.5),
+    0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .playBtn:active {
   transform: scale(0.97);
-  box-shadow: 0 0 30px rgba(0, 240, 240, 0.5);
+  box-shadow:
+    0 0 35px rgba(0, 240, 240, 0.6),
+    0 2px 10px rgba(0, 0, 0, 0.3);
 }

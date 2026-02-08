@@ -14,7 +14,7 @@ type Props = {
   clearingRows: readonly number[]
 }
 
-const COLORS = ['#00f0f0', '#f0f000', '#a000f0', '#00f000', '#f00000', '#0000f0', '#f0a000']
+const COLORS = ['#00f0f0', '#f0f000', '#a000f0', '#00f000', '#f00000', '#0060f0', '#f0a000', '#ffffff']
 
 let nextId = 0
 
@@ -30,22 +30,22 @@ export function Particles({ clearingRows }: Props) {
     prevRowsRef.current = clearingRows
 
     const newParticles: Particle[] = []
-    const count = clearingRows.length * 8
+    const count = clearingRows.length * 12
 
     for (let i = 0; i < count; i++) {
       newParticles.push({
         id: nextId++,
         x: Math.random() * 100,
-        y: -4,
-        dx: (Math.random() - 0.5) * 80,
-        dy: -(Math.random() * 40 + 20),
+        y: -2 - Math.random() * 6,
+        dx: (Math.random() - 0.5) * 100,
+        dy: -(Math.random() * 50 + 25),
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
       })
     }
 
     setParticles(newParticles)
 
-    const timer = setTimeout(() => setParticles([]), 700)
+    const timer = setTimeout(() => setParticles([]), 900)
     return () => clearTimeout(timer)
   }, [clearingRows])
 
@@ -61,7 +61,7 @@ export function Particles({ clearingRows }: Props) {
             left: `${p.x}%`,
             top: `${p.y}px`,
             backgroundColor: p.color,
-            boxShadow: `0 0 6px ${p.color}`,
+            boxShadow: `0 0 8px ${p.color}`,
             '--dx': `${p.dx}px`,
             '--dy': `${p.dy}px`,
           } as React.CSSProperties}
