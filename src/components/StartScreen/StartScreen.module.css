@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 24px;
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #00f0f0;
+  text-shadow: 0 0 30px rgba(0, 240, 240, 0.5), 0 0 60px rgba(0, 240, 240, 0.2);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: #8888aa;
+  font-size: 0.85rem;
+  margin-bottom: 32px;
+}
+
+.highScore {
+  color: #f0a000;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.rules {
+  max-width: 320px;
+  text-align: left;
+  margin-bottom: 32px;
+  color: #aaaacc;
+  font-size: 0.78rem;
+  line-height: 1.8;
+}
+
+.rules dt {
+  color: #c0c0e0;
+  font-weight: 600;
+  display: inline;
+}
+
+.rules dd {
+  display: inline;
+  margin: 0;
+}
+
+.rules dd::after {
+  content: '';
+  display: block;
+}
+
+.playBtn {
+  padding: 14px 48px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0a2e;
+  background: linear-gradient(135deg, #00f0f0, #00c0c0);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 240, 240, 0.3);
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+
+.playBtn:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 30px rgba(0, 240, 240, 0.5);
+}
