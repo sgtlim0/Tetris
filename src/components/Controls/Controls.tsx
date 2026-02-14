@@ -1,4 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react'
+import { haptic, hapticStrong } from '../../utils/sound.ts'
 import styles from './Controls.module.css'
 
 type Props = {
@@ -13,6 +14,13 @@ type Props = {
 
 const DAS_DELAY = 170
 const ARR_RATE = 50
+
+function withHaptic(action: () => void, ms?: number): () => void {
+  return () => {
+    haptic(ms)
+    action()
+  }
+}
 
 export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, onHold, onPause }: Props) {
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null)
@@ -31,7 +39,6 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
     }
   }, [])
 
-  // Auto-repeat for on-screen buttons (DAS + ARR)
   const startRepeat = useCallback((action: () => void) => {
     clearRepeat()
     action()
@@ -71,11 +78,14 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
 
     if (absDx < minSwipe && absDy < minSwipe && elapsed < 300) {
       if (!swipeHandledRef.current) {
+        haptic()
         onRotate()
       }
     } else if (absDy > absDx && dy < -minSwipe) {
+      haptic()
       onHold()
     } else if (absDy > absDx && dy > minSwipe * 2) {
+      hapticStrong()
       onHardDrop()
     }
 
@@ -93,6 +103,7 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
 
     if (absDx > 25 && absDx > absDy) {
       swipeHandledRef.current = true
+      haptic(5)
       if (dx > 0) {
         onRight()
       } else {
@@ -123,41 +134,53 @@ export function Controls({ onLeft, onRight, onRotate, onSoftDrop, onHardDrop, on
 
   return (
     <div className={styles.controls}>
-      <div className={styles.topRow}>
-        <button className={styles.btnSmall} onPointerDown={onHold}>Hold</button>
-        <button className={styles.btnSmall} onPointerDown={onPause}>| |</button>
+      {/* Top utility row */}
+      <div className={styles.utilRow}>
+        <button className={styles.btnUtil} onPointerDown={withHaptic(onHold)}>Hold</button>
+        <button className={styles.btnUtil} onPointerDown={withHaptic(onPause)}>| |</button>
       </div>
-      <div className={styles.row}>
-        <button className={styles.btn} onPointerDown={onRotate}>&#x21BB;</button>
-      </div>
-      <div className={styles.row}>
-        <button
-          className={styles.btn}
-          onPointerDown={handlePointerDown(onLeft)}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
-        >
-          &#x25C0;
-        </button>
-        <button
-          className={styles.btn}
-          onPointerDown={handlePointerDown(onSoftDrop)}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
-        >
-          &#x25BC;
-        </button>
-        <button
-          className={styles.btn}
-          onPointerDown={handlePointerDown(onRight)}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
-        >
-          &#x25B6;
-        </button>
-      </div>
-      <div className={styles.row}>
-        <button className={styles.btnWide} onPointerDown={onHardDrop}>Hard Drop</button>
+
+      {/* Gamepad layout: D-pad left, Actions right */}
+      <div className={styles.gamepad}>
+        {/* Left: D-pad */}
+        <div className={styles.dpad}>
+          <div className={styles.dpadRow}>
+            <button
+              className={styles.btn}
+              onPointerDown={handlePointerDown(withHaptic(onLeft, 5))}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+            >
+              &#x25C0;
+            </button>
+            <button
+              className={styles.btn}
+              onPointerDown={handlePointerDown(withHaptic(onSoftDrop, 5))}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+            >
+              &#x25BC;
+            </button>
+            <button
+              className={styles.btn}
+              onPointerDown={handlePointerDown(withHaptic(onRight, 5))}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+            >
+              &#x25B6;
+            </button>
+          </div>
+        </div>
+
+        {/* Right: Action buttons */}
+        <div className={styles.actions}>
+          <button className={styles.btnAction} onPointerDown={withHaptic(onRotate)}>
+            &#x21BB;
+          </button>
+          <button className={styles.btnDrop} onPointerDown={withHaptic(onHardDrop, 20)}>
+            &#x25BD;
+          </button>
+        </div>
       </div>
     </div>
   )

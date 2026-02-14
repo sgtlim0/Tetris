@@ -4,10 +4,59 @@
   align-items: center;
   justify-content: center;
   min-height: 100dvh;
-  padding: 8px;
+  padding: 4px;
   position: relative;
   overflow: hidden;
   animation: fadeIn 0.3s ease-out;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 4px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #00f0f0;
+  text-shadow: 0 0 10px rgba(0, 240, 240, 0.5);
+  text-align: center;
+}
+
+.fullscreenBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(30, 30, 70, 0.6);
+  border: 1px solid rgba(80, 80, 140, 0.3);
+  color: #8888aa;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.fullscreenBtn:active {
+  background: rgba(50, 50, 110, 0.8);
+  color: #00f0f0;
+}
+
+/* Mobile compact info bar: shown only on mobile portrait */
+.mobileInfoBar {
+  display: none;
+}
+
+/* Mobile next queue: shown only on mobile portrait */
+.mobileNextQueue {
+  display: none;
 }
 
 .gameLayout {
@@ -40,17 +89,6 @@
   gap: 4px;
 }
 
-.title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #00f0f0;
-  text-shadow: 0 0 10px rgba(0, 240, 240, 0.5);
-  margin-bottom: 4px;
-  text-align: center;
-}
-
 .pauseOverlay {
   position: fixed;
   inset: 0;
@@ -80,8 +118,8 @@
 
 .pauseResume {
   margin-top: 20px;
-  padding: 10px 32px;
-  font-size: 0.9rem;
+  padding: 14px 40px;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -91,17 +129,78 @@
   box-shadow: 0 0 15px rgba(0, 240, 240, 0.3);
 }
 
-@media (max-width: 480px) {
-  .gameLayout {
+/* Mobile portrait: vertical layout */
+@media (max-width: 480px) and (orientation: portrait) {
+  .container {
+    justify-content: flex-start;
+    padding: 4px 2px;
+  }
+
+  .topBar {
+    margin-bottom: 2px;
+  }
+
+  .title {
+    font-size: 0.9rem;
+  }
+
+  /* Show mobile info bar, hide desktop side panels */
+  .mobileInfoBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 4px;
+  }
+
+  .mobileNextQueue {
+    display: flex;
     gap: 6px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .leftPanel,
+  .rightPanel {
+    display: none;
+  }
+
+  .gameLayout {
+    gap: 0;
+  }
+}
+
+/* Mobile landscape: 3-panel like desktop but compact */
+@media (max-height: 500px) and (orientation: landscape) {
+  .container {
+    justify-content: center;
+    padding: 2px 8px;
+  }
+
+  .topBar {
+    margin-bottom: 2px;
+  }
+
+  .title {
+    font-size: 0.85rem;
+  }
+
+  .gameLayout {
+    gap: 8px;
   }
 
   .leftPanel,
   .rightPanel {
     min-width: 60px;
   }
+}
 
-  .title {
-    font-size: 1rem;
+/* Tablet and desktop */
+@media (min-width: 481px) {
+  .mobileInfoBar,
+  .mobileNextQueue {
+    display: none;
   }
 }

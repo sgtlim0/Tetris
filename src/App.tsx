@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react'
 import { useTetris } from './hooks/useTetris.ts'
 import { Playfield } from './components/Playfield/Playfield.tsx'
 import { PiecePreview } from './components/PiecePreview/PiecePreview.tsx'
@@ -8,8 +9,22 @@ import { GameOver } from './components/GameOver/GameOver.tsx'
 import { Particles } from './components/Particles/Particles.tsx'
 import styles from './App.module.css'
 
+function toggleFullscreen(): void {
+  if (document.fullscreenElement) {
+    document.exitFullscreen()
+  } else {
+    document.documentElement.requestFullscreen().catch(() => {})
+  }
+}
+
 export default function App() {
   const game = useTetris()
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  const handleFullscreen = useCallback(() => {
+    toggleFullscreen()
+    setIsFullscreen(prev => !prev)
+  }, [])
 
   if (game.phase === 'start') {
     return <StartScreen onStart={game.startGame} highScore={game.highScore} />
@@ -30,8 +45,28 @@ export default function App() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.title}>Tetris</div>
+      <div className={styles.topBar}>
+        <div className={styles.title}>Tetris</div>
+        <button className={styles.fullscreenBtn} onClick={handleFullscreen}>
+          {isFullscreen ? '⊡' : '⛶'}
+        </button>
+      </div>
+
+      {/* Mobile compact info bar */}
+      <div className={styles.mobileInfoBar}>
+        <PiecePreview type={game.holdPiece} label="Hold" dimmed={game.holdUsed} small />
+        <ScorePanel
+          score={game.score}
+          level={game.level}
+          lines={game.lines}
+          combo={game.combo}
+          compact
+        />
+        <PiecePreview type={game.nextQueue[0] ?? null} label="Next" small />
+      </div>
+
       <div className={styles.gameLayout}>
+        {/* Desktop left panel */}
         <div className={styles.leftPanel}>
           <PiecePreview type={game.holdPiece} label="Hold" dimmed={game.holdUsed} />
           <ScorePanel
@@ -51,6 +86,7 @@ export default function App() {
           />
           <Particles clearingRows={game.clearingRows} />
         </div>
+        {/* Desktop right panel */}
         <div className={styles.rightPanel}>
           <PiecePreview type={game.nextQueue[0] ?? null} label="Next" />
           {game.nextQueue.slice(1, 3).map((type, i) => (
@@ -58,6 +94,14 @@ export default function App() {
           ))}
         </div>
       </div>
+
+      {/* Mobile next queue (below playfield, horizontal) */}
+      <div className={styles.mobileNextQueue}>
+        {game.nextQueue.slice(1, 4).map((type, i) => (
+          <PiecePreview key={i} type={type} label="" small />
+        ))}
+      </div>
+
       <Controls
         onLeft={game.moveLeft}
         onRight={game.moveRight}

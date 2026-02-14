@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { hapticStrong, hapticPattern } from '../utils/sound.ts'
 import type { GameState, GamePhase, ActivePiece, TetrominoType } from '../game/types.ts'
 import { createEmptyBoard, placePiece, findFullRows, clearRows, getGhostPosition } from '../game/board.ts'
 import { createBag, spawnPiece, rotatePiece, movePiece, hardDrop } from '../game/pieces.ts'
@@ -90,6 +91,7 @@ export function useTetris(): UseTetrisReturn {
   const lockResetsRef = useRef(0)
   const gravityTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const lastRotationRef = useRef(false)
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null)
 
   // Pull next piece from bag, refilling as needed
   const pullFromBag = useCallback((): TetrominoType => {
@@ -142,8 +144,10 @@ export function useTetris(): UseTetrisReturn {
       // Enter clearing phase
       if (fullRows.length === 4) {
         playTetrisClear()
+        hapticPattern([30, 50, 30, 50, 60])
       } else {
         playLineClear(fullRows.length)
+        hapticStrong()
       }
 
       const newCombo = s.combo + 1
@@ -402,6 +406,7 @@ export function useTetris(): UseTetrisReturn {
     const dropped = hardDrop(s.activePiece, s.board)
     const rowsDropped = dropped.row - s.activePiece.row
     playHardDrop()
+    hapticStrong()
 
     clearLockTimer()
     lockResetsRef.current = 0
@@ -509,6 +514,32 @@ export function useTetris(): UseTetrisReturn {
     clearLockTimer()
     setState(createInitialState())
   }, [clearGravityTimer, clearLockTimer])
+
+  // Screen Wake Lock: keep screen on while playing
+  useEffect(() => {
+    async function acquireWakeLock() {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLockRef.current = await navigator.wakeLock.request('screen')
+        }
+      } catch { /* ignore - e.g. not supported or denied */ }
+    }
+
+    function releaseWakeLock() {
+      if (wakeLockRef.current) {
+        wakeLockRef.current.release().catch(() => {})
+        wakeLockRef.current = null
+      }
+    }
+
+    if (state.phase === 'playing') {
+      acquireWakeLock()
+    } else {
+      releaseWakeLock()
+    }
+
+    return () => releaseWakeLock()
+  }, [state.phase])
 
   // Restart gravity when level changes
   useEffect(() => {

@@ -110,3 +110,27 @@
   background: rgba(40, 40, 90, 0.9);
   border-color: #5a5a8a;
 }
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .retryBtn,
+  .menuBtn {
+    padding: 14px 44px;
+    font-size: 1.05rem;
+    min-height: 52px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .retryBtn,
+  .menuBtn {
+    width: 100%;
+  }
+}

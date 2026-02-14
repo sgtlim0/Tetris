@@ -1,5 +1,28 @@
 let ctx: AudioContext | null = null
 
+/** Trigger short haptic vibration if supported */
+export function haptic(ms: number = 10): void {
+  try {
+    if (navigator.vibrate) {
+      navigator.vibrate(ms)
+    }
+  } catch { /* ignore */ }
+}
+
+/** Stronger haptic for impactful actions (hard drop, line clear) */
+export function hapticStrong(): void {
+  haptic(25)
+}
+
+/** Pattern haptic for special events */
+export function hapticPattern(pattern: number[]): void {
+  try {
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern)
+    }
+  } catch { /* ignore */ }
+}
+
 function getCtx(): AudioContext {
   if (!ctx) ctx = new AudioContext()
   if (ctx.state === 'suspended') ctx.resume()

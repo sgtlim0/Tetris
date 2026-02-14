@@ -50,3 +50,43 @@
     text-shadow: 0 0 8px rgba(240, 160, 0, 0.4);
   }
 }
+
+/* Compact mobile variant */
+.compactPanel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 15, 50, 0.7);
+  border: 1px solid #2a2a5a;
+  border-radius: 6px;
+  padding: 6px 10px;
+  backdrop-filter: blur(2px);
+}
+
+.compactItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.compactLabel {
+  font-size: 0.45rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6a6a8a;
+  font-weight: 600;
+}
+
+.compactValue {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e8e8f0;
+  font-variant-numeric: tabular-nums;
+}
+
+.compactCombo {
+  color: #f0a000;
+  font-size: 0.7rem;
+  font-weight: 700;
+  animation: comboPulse 0.3s ease-out;
+}
