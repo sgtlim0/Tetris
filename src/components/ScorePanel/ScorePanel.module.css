@@ -51,15 +51,15 @@
   }
 }
 
-/* Compact mobile variant */
+/* Compact mobile variant (target height: ~36px) */
 .compactPanel {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: rgba(15, 15, 50, 0.7);
   border: 1px solid #2a2a5a;
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 4px 8px;
   backdrop-filter: blur(2px);
 }
 
@@ -67,18 +67,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  line-height: 1.1;
 }
 
 .compactLabel {
-  font-size: 0.45rem;
+  font-size: 0.4rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: #6a6a8a;
   font-weight: 600;
 }
 
 .compactValue {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #e8e8f0;
   font-variant-numeric: tabular-nums;
@@ -86,7 +87,7 @@
 
 .compactCombo {
   color: #f0a000;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
   animation: comboPulse 0.3s ease-out;
 }

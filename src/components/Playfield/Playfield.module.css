@@ -104,10 +104,26 @@
   }
 }
 
-/* Mobile portrait: larger playfield */
+/*
+ * Mobile portrait: size playfield to fit viewport height
+ * Formula: width = min(widthCap, (viewportHeight - safeArea - uiChrome) / 2)
+ *
+ * iPhone 14 Pro (393x852pt, safe ~93pt):
+ *   min(85vw=334, (852 - 93 - 172) / 2) = min(334, 293) = 293px
+ *   → height = 586px, total = 93 + 172 + 586 = 851pt ✓
+ *
+ * iPhone SE (375x667pt, no safe area):
+ *   min(85vw=319, (667 - 172) / 2) = min(319, 247) = 247px
+ *   → height = 494px, total = 172 + 494 = 666pt ✓
+ *
+ * 172px = topBar(22) + infoBar(40) + controls(100) + gaps/padding(10)
+ */
 @media (max-width: 480px) and (orientation: portrait) {
   .playfield {
-    width: min(88vw, 360px);
+    width: min(
+      85vw,
+      calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 172px) / 2)
+    );
   }
 }
 

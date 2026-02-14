@@ -3,8 +3,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100dvh;
-  padding: 4px;
+  height: 100dvh;
+  padding: 8px;
   position: relative;
   overflow: hidden;
   animation: fadeIn 0.3s ease-out;
@@ -18,6 +18,7 @@
   margin-bottom: 4px;
   width: 100%;
   max-width: 600px;
+  flex-shrink: 0;
 }
 
 .title {
@@ -52,11 +53,7 @@
 /* Mobile compact info bar: shown only on mobile portrait */
 .mobileInfoBar {
   display: none;
-}
-
-/* Mobile next queue: shown only on mobile portrait */
-.mobileNextQueue {
-  display: none;
+  flex-shrink: 0;
 }
 
 .gameLayout {
@@ -129,19 +126,33 @@
   box-shadow: 0 0 15px rgba(0, 240, 240, 0.3);
 }
 
-/* Mobile portrait: vertical layout */
+/*
+ * Mobile portrait layout
+ * iPhone 14 Pro: 393x852pt logical, safe area ~59pt top + ~34pt bottom
+ * Layout budget: topBar(22) + infoBar(40) + playfield(?) + controls(100) + gaps(10) = 172px chrome
+ * Playfield height = 100dvh - safe-area - 172px
+ * Playfield width = height / 2 (aspect ratio 1:2)
+ */
 @media (max-width: 480px) and (orientation: portrait) {
   .container {
     justify-content: flex-start;
-    padding: 4px 2px;
+    padding: env(safe-area-inset-top, 4px) 2px env(safe-area-inset-bottom, 4px);
+    gap: 2px;
   }
 
   .topBar {
-    margin-bottom: 2px;
+    margin-bottom: 0;
+    height: 22px;
   }
 
   .title {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+  }
+
+  .fullscreenBtn {
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
   }
 
   /* Show mobile info bar, hide desktop side panels */
@@ -149,17 +160,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     width: 100%;
     max-width: 400px;
-    margin-bottom: 4px;
-  }
-
-  .mobileNextQueue {
-    display: flex;
-    gap: 6px;
-    justify-content: center;
-    margin-top: 4px;
   }
 
   .leftPanel,
@@ -169,6 +172,15 @@
 
   .gameLayout {
     gap: 0;
+    flex: 1;
+    min-height: 0;
+    align-items: center;
+  }
+
+  .centerPanel {
+    flex: 1;
+    min-height: 0;
+    justify-content: center;
   }
 }
 
@@ -199,8 +211,7 @@
 
 /* Tablet and desktop */
 @media (min-width: 481px) {
-  .mobileInfoBar,
-  .mobileNextQueue {
+  .mobileInfoBar {
     display: none;
   }
 }

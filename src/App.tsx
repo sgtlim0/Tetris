@@ -95,13 +95,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* Mobile next queue (below playfield, horizontal) */}
-      <div className={styles.mobileNextQueue}>
-        {game.nextQueue.slice(1, 4).map((type, i) => (
-          <PiecePreview key={i} type={type} label="" small />
-        ))}
-      </div>
-
       <Controls
         onLeft={game.moveLeft}
         onRight={game.moveRight}
